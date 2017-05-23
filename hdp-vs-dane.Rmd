@@ -2,7 +2,10 @@
 title: "HDP vs daně"
 author: "Vaclav Haisman"
 date: "23 května 2017"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
 ...
 
 ```{r setup, include=FALSE}
@@ -131,8 +134,8 @@ ggplot(df,aes(dane, hdp)) +
 
 
 ```{r, echo=FALSE}
-CorrTest <- cor.test(df$hdp, df$dane, conf.level = 0.95, method = "pearson")
+CorrTest <- cor.test(df$dane, df$hdp, conf.level = 0.95, method = "pearson")
 Corr <- CorrTest$estimate
 ```
 
-Pearsonův korelační koeficient mezi mezi HDP a inkasem daní je \(r(`r fmtNumM(CorrTest$parameter)`)=`r fmtNumM(Corr)`\), \({CI}_{`r attr(CorrTest$conf.int, "conf.level")`}=(`r fmtNumM(CorrTest$conf.int[1])`; `r fmtNumM(CorrTest$conf.int[2])`)\), \(p=`r fmtNumM(CorrTest$p.value)`\), \(r^2=`r fmtNumM(Corr*Corr)`\).
+Pearsonův korelační koeficient mezi HDP a inkasem daní je \(r(`r fmtNumM(CorrTest$parameter)`)=`r fmtNumM(Corr)`\), \({CI}_{`r fmtNumM(attr(CorrTest$conf.int, "conf.level"))`}=(`r fmtNumM(CorrTest$conf.int[1])`; `r fmtNumM(CorrTest$conf.int[2])`)\), \(p=`r fmtNumM(CorrTest$p.value)`\), \(r^2=`r fmtNumM(Corr*Corr)`\).
