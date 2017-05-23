@@ -91,7 +91,7 @@ nDF <- do.call(rbind, list(a,b))
 
 ```
 
-```{r normalizovanaData, echo=FALSE, fig.keep="high", fig.cap="Porovnání normalizovaných řad HDP a inkasa daní", dpi=100}
+```{r normalizovanaData, echo=FALSE, fig.keep="high", fig.cap="Porovnání normalizovaných řad HDP a inkasa daní", dpi=200}
 pdf.options(encoding = 'CP1250')
 
 ggplot(nDF, aes(x=factor(rok), y = value, group=id, color=id)) +
@@ -101,16 +101,16 @@ ggplot(nDF, aes(x=factor(rok), y = value, group=id, color=id)) +
     theme(legend.position="top", axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-```{r korelace, echo=FALSE, fig.keep="high", fig.cap="Korelace HDP a inkasa daní", dpi=100}
+```{r korelace, echo=FALSE, fig.keep="high", fig.cap="Korelace HDP a inkasa daní", dpi=200}
 pdf.options(encoding = 'CP1250')
 
 ggplot(df,aes(dane, hdp)) +
-    stat_smooth(formula = y ~ x, method="gam", level=0.95) +
+    stat_smooth(formula = y ~ x, method="glm", level=0.95) +
     geom_point() +
     geom_text(aes(label=rok), hjust=0.5, vjust=-0.35, angle=0, check_overlap = TRUE) +
     #scale_x_continuous(breaks = seq(round(min(DF$pocEvid), -5), round(max(DF$hdp), -5), by = 50000)) +
     labs(x = "inkaso daní [milióny Kč]",
-         y = "HDP") +
+         y = "HDP [milióny Kč]") +
     theme(legend.position="top")
 ```
 
@@ -118,8 +118,8 @@ ggplot(df,aes(dane, hdp)) +
 CorrTest <- cor.test(df$hdp, df$dane, conf.level = 0.95, method = "pearson")
 Corr <- CorrTest$estimate
 
-CorrTestS <- cor.test(df$hdp, df$dane, conf.level = 0.99, method = "spearman")
+CorrTestS <- cor.test(df$hdp, df$dane, conf.level = 0.95, method = "spearman")
 CorrS <- CorrTestS$estimate
 ```
 
-Pearsonův korelační koeficient mezi mezi HDP a vybranou daní je \(r(`r fmtNumM(CorrTest$parameter)`)=`r fmtNumM(Corr)`\), \({CI}_{`r attr(CorrTest$conf.int, "conf.level")`}=(`r fmtNumM(CorrTest$conf.int[1])`; `r fmtNumM(CorrTest$conf.int[2])`)\), \(p=`r fmtNumM(CorrTest$p.value)`\), \(r^2=`r fmtNumM(Corr*Corr)`\).
+Pearsonův korelační koeficient mezi mezi HDP a inkasem daní je \(r(`r fmtNumM(CorrTest$parameter)`)=`r fmtNumM(Corr)`\), \({CI}_{`r attr(CorrTest$conf.int, "conf.level")`}=(`r fmtNumM(CorrTest$conf.int[1])`; `r fmtNumM(CorrTest$conf.int[2])`)\), \(p=`r fmtNumM(CorrTest$p.value)`\), \(r^2=`r fmtNumM(Corr*Corr)`\).
