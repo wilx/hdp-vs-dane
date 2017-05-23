@@ -91,6 +91,20 @@ nDF <- do.call(rbind, list(a,b))
 
 ```
 
+```{r podilDaniNaHDP, echo=FALSE, fig.keep="high", fig.cap="Daně jako podíl na HDP", dpi=200}
+pdf.options(encoding = 'CP1250')
+
+podilDaniNaHDP <- data.frame(rok=df$rok, podil=df$dane/df$hdp*100)
+ggplot(podilDaniNaHDP, aes(rok, podil)) +
+    geom_col(width = 0.4) +
+    geom_text(aes(label=fmtNum2(podil,3)), hjust=0.0, vjust=-0.35, angle=45, check_overlap = FALSE) +
+    scale_y_continuous(limits=c(0, 18)) +
+    #scale_x_continuous(breaks = seq(round(min(DF$pocEvid), -5), round(max(DF$hdp), -5), by = 50000)) +
+    labs(x = "rok",
+         y = "inkaso daní jako podíl na HDP [%]") +
+    theme(legend.position="top", axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
 ```{r normalizovanaData, echo=FALSE, fig.keep="high", fig.cap="Porovnání normalizovaných řad HDP a inkasa daní", dpi=200}
 pdf.options(encoding = 'CP1250')
 
@@ -114,12 +128,10 @@ ggplot(df,aes(dane, hdp)) +
     theme(legend.position="top")
 ```
 
+
 ```{r, echo=FALSE}
 CorrTest <- cor.test(df$hdp, df$dane, conf.level = 0.95, method = "pearson")
 Corr <- CorrTest$estimate
-
-CorrTestS <- cor.test(df$hdp, df$dane, conf.level = 0.95, method = "spearman")
-CorrS <- CorrTestS$estimate
 ```
 
 Pearsonův korelační koeficient mezi mezi HDP a inkasem daní je \(r(`r fmtNumM(CorrTest$parameter)`)=`r fmtNumM(Corr)`\), \({CI}_{`r attr(CorrTest$conf.int, "conf.level")`}=(`r fmtNumM(CorrTest$conf.int[1])`; `r fmtNumM(CorrTest$conf.int[2])`)\), \(p=`r fmtNumM(CorrTest$p.value)`\), \(r^2=`r fmtNumM(Corr*Corr)`\).
